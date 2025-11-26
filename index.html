@@ -117,11 +117,14 @@
         }
         .user-menu i { cursor: pointer; transition: 0.2s; }
         .user-menu i:hover { color: white; }
+        
+        /* รูปโปรไฟล์ */
         .channel-icon img {
             width: 38px; height: 38px;
             border-radius: 50%;
             border: 2px solid transparent;
             transition: 0.3s;
+            object-fit: cover;
         }
         .channel-icon img:hover { border-color: var(--accent); }
 
@@ -132,7 +135,6 @@
             width: 250px;
             padding: 20px 12px;
             overflow-y: auto;
-            /* background-color: var(--sidebar-bg); */ /* Optional: if want distinct sidebar */
         }
         .sidebar-item {
             display: flex;
@@ -174,7 +176,7 @@
 
         /* --- Video Card Design --- */
         .video-card {
-            background-color: var(--card-bg); /* หรือจะใช้ transparent ก็ได้ */
+            background-color: var(--card-bg);
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -206,7 +208,7 @@
         }
 
         .video-card:hover .thumbnail img {
-            transform: scale(1.1); /* Zoom effect */
+            transform: scale(1.1);
             opacity: 1;
         }
 
@@ -260,18 +262,19 @@
             100% { background-position: -200% 0; }
         }
 
-        /* --- Modal Player --- */
+        /* --- Modal Player (ส่วนที่แก้ไขให้ใหญ่ขึ้น) --- */
         .video-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.95); /* เพิ่มความมืดพื้นหลัง */
+            backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             animation: fadeIn 0.3s ease;
+            padding: 20px; /* เพิ่ม Padding กันชิดขอบ */
         }
 
         @keyframes fadeIn {
@@ -280,26 +283,36 @@
         }
 
         .video-container {
-            width: 85%;
-            max-width: 1100px;
-            aspect-ratio: 16/9;
+            width: 90%; /* ขยายความกว้างเป็น 90% ของหน้าจอ */
+            max-width: 1400px; /* เพิ่มขีดจำกัดความกว้างให้รองรับจอใหญ่ */
+            aspect-ratio: 16/9; /* บังคับสัดส่วน 16:9 เสมอ */
             background: #000;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .close-btn {
             margin-top: 24px;
-            padding: 10px 30px;
+            padding: 12px 35px;
             background-color: rgba(255,255,255,0.1);
             color: white;
             border: 1px solid rgba(255,255,255,0.2);
             font-family: 'Kanit';
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             border-radius: 50px;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .close-btn:hover {
             background-color: var(--accent);
@@ -322,6 +335,11 @@
             .search-container { display: none; } 
             .video-grid { grid-template-columns: 1fr; }
             .header { padding: 0 16px; }
+            
+            /* ปรับ Modal บนมือถือ */
+            .video-container {
+                width: 100%; /* มือถือให้เต็มจอเลย */
+            }
         }
     </style>
 </head>
@@ -341,7 +359,7 @@
             <i class="fas fa-video"></i>
             <i class="fas fa-bell"></i>
             <div class="channel-icon">
-                <img id="my-profile-pic" src="https://ui-avatars.com/api/?name=Koo+Mean&background=random&color=fff" alt="Profile">
+                <img id="my-profile-pic" src="https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Profile">
             </div>
         </div>
     </header>
@@ -383,7 +401,6 @@
         // แสดง Skeleton Loading ระหว่างรอข้อมูล
         function showSkeletonLoading() {
             container.innerHTML = '';
-            // สร้างไพ่ปลอมๆ 8 ใบ
             for(let i=0; i<8; i++) {
                 container.innerHTML += `
                     <div class="video-card" style="pointer-events: none;">
@@ -402,7 +419,7 @@
 
         // ฟังก์ชันดึงข้อมูลจาก YouTube API
         async function fetchYouTubeVideos() {
-            showSkeletonLoading(); // เริ่มแสดง Loading
+            showSkeletonLoading(); 
 
             try {
                 const uploadsPlaylistId = YOUR_CHANNEL_ID.replace('UC', 'UU');
@@ -419,7 +436,7 @@
                 allVideos = data.items.map(item => ({
                     id: item.snippet.resourceId.videoId,
                     title: item.snippet.title,
-                    thumbnail: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : item.snippet.thumbnails.medium.url, // ใช้รูปชัดขึ้น
+                    thumbnail: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : item.snippet.thumbnails.medium.url, 
                     date: new Date(item.snippet.publishedAt).toLocaleDateString('th-TH'),
                     channelTitle: item.snippet.channelTitle
                 }));
@@ -443,7 +460,7 @@
                         </div>
                         <div class="video-info">
                             <div class="channel-icon">
-                                <img src="https://ui-avatars.com/api/?name=Koo+Mean&background=random&color=fff" alt="Icon">
+                                <img src="https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Icon">
                             </div>
                             <div class="video-details">
                                 <div class="video-title">${video.title}</div>
@@ -473,7 +490,6 @@
             renderVideos(filtered);
         }
 
-        // เริ่มดึงข้อมูลทันทีเมื่อเปิดเว็บ
         fetchYouTubeVideos();
 
     </script>
