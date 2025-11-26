@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Channel Gallery</title>
+    <title>Koo Mean Studio Gallery</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         /* --- 1. CSS Reset & Variables --- */
@@ -158,6 +158,13 @@
             border-radius: 50%;
             background-color: #555;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .channel-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .video-details {
@@ -231,9 +238,9 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { display: none; } /* ซ่อนเมนูซ้ายบนมือถือ */
+            .sidebar { display: none; } 
             main { margin-left: 0; }
-            .search-bar { display: none; } /* ซ่อนช่องค้นหาบนมือถือ (แบบย่อ) */
+            .search-bar { display: none; } 
         }
     </style>
 </head>
@@ -241,32 +248,33 @@
 
     <header>
         <div class="logo">
-            <i class="fab fa-youtube"></i> MyTube
+            <i class="fab fa-youtube"></i> KooMeanTube
         </div>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="ค้นหา" onkeyup="filterVideos()">
+            <input type="text" id="searchInput" placeholder="ค้นหาคลิปในช่อง..." onkeyup="filterVideos()">
             <button><i class="fas fa-search"></i></button>
         </div>
         <div class="user-menu">
             <i class="fas fa-video"></i>
             <i class="fas fa-bell"></i>
-            <div class="channel-icon" style="width: 32px; height: 32px; background: #555;"></div>
+            <div class="channel-icon">
+                <img src="https://yt3.googleusercontent.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Profile">
+            </div>
         </div>
     </header>
 
     <aside class="sidebar">
-        <a href="#" class="sidebar-item active"><i class="fas fa-home"></i> หน้าแรก</a>
-        <a href="#" class="sidebar-item"><i class="fab fa-youtube"></i> วิดีโอของฉัน</a>
-        <a href="#" class="sidebar-item"><i class="fas fa-history"></i> ประวัติการเข้าชม</a>
+        <a href="#" class="sidebar-item active" onclick="renderVideos(myVideos)"><i class="fas fa-home"></i> หน้าแรก</a>
+        <a href="#" class="sidebar-item"><i class="fab fa-youtube"></i> วิดีโอทั้งหมด</a>
         <hr style="border-color: #333;">
-        <div style="padding: 10px; color: #aaa; font-size: 0.9rem;">ติดตาม</div>
-        <a href="#" class="sidebar-item"><i class="fas fa-user-circle"></i> Koomean Ch</a>
+        <div style="padding: 10px; color: #aaa; font-size: 0.9rem;">เจ้าของช่อง</div>
+        <a href="https://www.youtube.com/@koomeanstudio" target="_blank" class="sidebar-item"><i class="fas fa-user-circle"></i> Koo Mean Studio</a>
     </aside>
 
     <main>
         <div class="video-grid" id="videoContainer">
             </div>
-        <div class="footer-credit">Create By koomean</div>
+        <div class="footer-credit">Web Created By koomean</div>
     </main>
 
     <div class="video-modal" id="videoModal">
@@ -277,40 +285,39 @@
     </div>
 
     <script>
-        // --- ส่วนการตั้งค่าข้อมูลวิดีโอ (แก้ไขตรงนี้!) ---
-        // id: เอามาจากลิงก์ Youtube เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ -> id คือ dQw4w9WgXcQ
+        // --- ส่วนข้อมูลวิดีโอจากช่อง Koo Mean Studio ---
+        // ผมได้ดึง Video ID มาให้แล้วครับ หากมีคลิปใหม่ สามารถมาเพิ่มต่อท้ายในนี้ได้เลย
         const myVideos = [
             {
-                id: 'dQw4w9WgXcQ', 
-                title: 'เพลงในตำนานที่คุณต้องฟังสักครั้ง', 
-                views: '1.2B views', 
-                date: '10 years ago'
+                id: 'KHyw1yHCBg8', 
+                title: 'การอัพไซเคิลขยะพลาสติก | SCiUS SU11 ⭐️🟢', 
+                views: '33 views', 
+                date: 'Recently uploaded'
             },
             {
-                id: 'jNQXAC9IVRw', 
-                title: 'วิดีโอคลิปแรกของ YouTube (Me at the zoo)', 
-                views: '200M views', 
-                date: '17 years ago'
+                id: 'mKiIFuSg5VI', 
+                title: 'รีวิว GoPro12 เเบบชิวๆ🥶', 
+                views: '44 views', 
+                date: 'Recently uploaded'
             },
             {
-                id: '5qap5aO4i9A', 
-                title: 'Lo-fi hip hop radio - beats to relax/study to', 
-                views: '50K watching', 
-                date: 'LIVE'
+                id: 'R6NUJRnDo-0', 
+                title: 'สอนติดตั้งเเละใช้โปรเเกรมPyGraphwarเบื้องต้น', 
+                views: '79 views', 
+                date: '1 year ago'
             },
             {
-                id: 'LXb3EKWsInQ', 
-                title: 'COSTA RICA IN 4K 60fps HDR (ULTRA HD)', 
-                views: '5.2M views', 
+                id: 'wfpkIVU896o', 
+                title: 'เชื่อมAirPods3กับiPodจะฟังได้ไหม Part1', 
+                views: '159 views', 
+                date: '1 year ago'
+            },
+            {
+                id: 'STx_a2m_bMU', 
+                title: 'เซอร์ไพรส์วันเกิดเจ้าของช่อง(ผมโดนยึดช่องครับ😅)', 
+                views: '139 views', 
                 date: '2 years ago'
-            },
-            {
-                id: 'ScMzIvxBSi4', 
-                title: 'Star Wars - Imperial March (Guitars)', 
-                views: '10M views', 
-                date: '5 years ago'
-            },
-            // ก็อปปี้ปีกกา {} แล้วเพิ่มคลิปตรงนี้ได้เลย
+            }
         ];
 
         // --- JavaScript Logic ---
@@ -320,7 +327,7 @@
 
         // ฟังก์ชันสร้างการ์ดวิดีโอ
         function renderVideos(videos) {
-            container.innerHTML = ''; // เคลียร์ของเก่า
+            container.innerHTML = ''; 
             videos.forEach(video => {
                 const html = `
                     <div class="video-card" onclick="playVideo('${video.id}')">
@@ -328,10 +335,12 @@
                             <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg" alt="Thumbnail">
                         </div>
                         <div class="video-info">
-                            <div class="channel-icon"></div>
+                            <div class="channel-icon">
+                                <img src="https://yt3.googleusercontent.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Icon">
+                            </div>
                             <div class="video-details">
                                 <div class="video-title">${video.title}</div>
-                                <div class="channel-name">Koomean Channel <i class="fas fa-check-circle" style="font-size:0.7rem;"></i></div>
+                                <div class="channel-name">Koo Mean Studio <i class="fas fa-check-circle" style="font-size:0.7rem;"></i></div>
                                 <div class="meta-data">${video.views} • ${video.date}</div>
                             </div>
                         </div>
@@ -344,14 +353,13 @@
         // ฟังก์ชันเล่นวิดีโอ
         function playVideo(id) {
             modal.style.display = 'flex';
-            // autoplay=1 เพื่อให้เล่นทันที
             player.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
         }
 
         // ฟังก์ชันปิดวิดีโอ
         function closeVideo() {
             modal.style.display = 'none';
-            player.src = ''; // หยุดวิดีโอเมื่อปิด
+            player.src = '';
         }
 
         // ฟังก์ชันค้นหา
@@ -361,7 +369,7 @@
             renderVideos(filtered);
         }
 
-        // เริ่มทำงานครั้งแรก
+        // เริ่มทำงาน
         renderVideos(myVideos);
 
     </script>
