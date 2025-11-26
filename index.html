@@ -6,7 +6,7 @@
     <title>Koo Mean Studio Gallery</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* --- 1. CSS Reset & Variables --- */
+        /* --- CSS เดิม (คงเดิมไว้ทั้งหมดเพื่อความสวยงาม) --- */
         :root {
             --bg-color: #0f0f0f;
             --header-bg: #0f0f0f;
@@ -18,225 +18,36 @@
             --search-border: #303030;
             --accent: #3ea6ff;
         }
-
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        /* --- 2. Header (Top Bar) --- */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 56px;
-            background-color: var(--header-bg);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            z-index: 100;
-            border-bottom: 1px solid #2d2d2d;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            letter-spacing: -1px;
-        }
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
+        header { position: fixed; top: 0; left: 0; right: 0; height: 56px; background-color: var(--header-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 100; border-bottom: 1px solid #2d2d2d; }
+        .logo { display: flex; align-items: center; font-weight: bold; font-size: 1.2rem; letter-spacing: -1px; }
         .logo i { color: #ff0000; margin-right: 5px; font-size: 1.5rem; }
-
-        .search-bar {
-            display: flex;
-            flex: 0 1 600px;
-        }
-
-        .search-bar input {
-            width: 100%;
-            background-color: var(--search-bg);
-            border: 1px solid var(--search-border);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px 0 0 20px;
-            font-size: 1rem;
-            outline: none;
-        }
-        .search-bar input:focus { border-color: #1c62b9; }
-
-        .search-bar button {
-            background-color: #222;
-            border: 1px solid var(--search-border);
-            border-left: none;
-            color: var(--text-sec);
-            padding: 0 20px;
-            border-radius: 0 20px 20px 0;
-            cursor: pointer;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-sec);
-            font-size: 1.2rem;
-        }
-
-        /* --- 3. Sidebar (Left) --- */
-        .sidebar {
-            position: fixed;
-            top: 56px;
-            left: 0;
-            bottom: 0;
-            width: 240px;
-            background-color: var(--sidebar-bg);
-            padding: 10px;
-            overflow-y: auto;
-        }
-        
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 5px;
-            color: white;
-            text-decoration: none;
-        }
+        .search-bar { display: flex; flex: 0 1 600px; }
+        .search-bar input { width: 100%; background-color: var(--search-bg); border: 1px solid var(--search-border); color: white; padding: 8px 15px; border-radius: 20px 0 0 20px; font-size: 1rem; outline: none; }
+        .search-bar button { background-color: #222; border: 1px solid var(--search-border); border-left: none; color: var(--text-sec); padding: 0 20px; border-radius: 0 20px 20px 0; cursor: pointer; }
+        .user-menu { display: flex; align-items: center; gap: 15px; color: var(--text-sec); font-size: 1.2rem; }
+        .sidebar { position: fixed; top: 56px; left: 0; bottom: 0; width: 240px; background-color: var(--sidebar-bg); padding: 10px; overflow-y: auto; }
+        .sidebar-item { display: flex; align-items: center; padding: 10px 20px; border-radius: 10px; cursor: pointer; margin-bottom: 5px; color: white; text-decoration: none; }
         .sidebar-item:hover { background-color: var(--card-hover); }
-        .sidebar-item i { margin-right: 20px; width: 20px; text-align: center; }
         .sidebar-item.active { background-color: #272727; font-weight: bold; }
-
-        /* --- 4. Main Content (Video Grid) --- */
-        main {
-            margin-top: 56px;
-            margin-left: 240px;
-            padding: 24px;
-        }
-
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .video-card {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+        .sidebar-item i { margin-right: 20px; width: 20px; text-align: center; }
+        main { margin-top: 56px; margin-left: 240px; padding: 24px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { cursor: pointer; transition: transform 0.2s; }
+        .thumbnail { width: 100%; aspect-ratio: 16/9; background-color: #333; border-radius: 12px; overflow: hidden; position: relative; }
+        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .video-info { display: flex; margin-top: 12px; gap: 12px; }
+        .channel-icon { width: 36px; height: 36px; border-radius: 50%; background-color: #555; flex-shrink: 0; overflow: hidden; }
+        .channel-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .video-details { display: flex; flex-direction: column; }
+        .video-title { font-size: 1rem; font-weight: 600; margin-bottom: 5px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .channel-name, .meta-data { font-size: 0.85rem; color: var(--text-sec); }
+        .video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .video-container { width: 80%; max-width: 1000px; aspect-ratio: 16/9; background: #000; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        iframe { width: 100%; height: 100%; border: none; }
+        .close-btn { margin-top: 20px; padding: 10px 30px; background-color: #cc0000; color: white; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 20px; }
+        .footer-credit { margin-top: 50px; text-align: center; color: var(--text-sec); font-size: 0.9rem; width: 100%; }
         
-        .thumbnail {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background-color: #333;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-info {
-            display: flex;
-            margin-top: 12px;
-            gap: 12px;
-        }
-
-        .channel-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #555;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-        
-        .channel-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .video-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .channel-name, .meta-data {
-            font-size: 0.85rem;
-            color: var(--text-sec);
-        }
-
-        /* --- 5. Video Player Overlay (Modal) --- */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .video-container {
-            width: 80%;
-            max-width: 1000px;
-            aspect-ratio: 16/9;
-            background: #000;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .close-btn {
-            margin-top: 20px;
-            padding: 10px 30px;
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 20px;
-        }
-
-        .footer-credit {
-            margin-top: 50px;
-            text-align: center;
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            width: 100%;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .sidebar { display: none; } 
             main { margin-left: 0; }
@@ -247,33 +58,32 @@
 <body>
 
     <header>
-        <div class="logo">
-            <i class="fab fa-youtube"></i> KooMeanTube
-        </div>
+        <div class="logo"><i class="fab fa-youtube"></i> Koo Mean Tube</div>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="ค้นหาคลิปในช่อง..." onkeyup="filterVideos()">
+            <input type="text" id="searchInput" placeholder="ค้นหาคลิป..." onkeyup="filterVideos()">
             <button><i class="fas fa-search"></i></button>
         </div>
         <div class="user-menu">
             <i class="fas fa-video"></i>
             <i class="fas fa-bell"></i>
             <div class="channel-icon">
-                <img src="https://yt3.googleusercontent.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Profile">
+                <img id="my-profile-pic" src="https://ui-avatars.com/api/?name=Koo+Mean&background=random" alt="Profile">
             </div>
         </div>
     </header>
 
     <aside class="sidebar">
-        <a href="#" class="sidebar-item active" onclick="renderVideos(myVideos)"><i class="fas fa-home"></i> หน้าแรก</a>
-        <a href="#" class="sidebar-item"><i class="fab fa-youtube"></i> วิดีโอทั้งหมด</a>
+        <a href="#" class="sidebar-item active" onclick="loadVideos()"><i class="fas fa-home"></i> หน้าแรก</a>
+        <a href="https://www.youtube.com/@koomeanstudio" target="_blank" class="sidebar-item"><i class="fab fa-youtube"></i> ไปที่ YouTube</a>
         <hr style="border-color: #333;">
         <div style="padding: 10px; color: #aaa; font-size: 0.9rem;">เจ้าของช่อง</div>
-        <a href="https://www.youtube.com/@koomeanstudio" target="_blank" class="sidebar-item"><i class="fas fa-user-circle"></i> Koo Mean Studio</a>
+        <a href="#" class="sidebar-item"><i class="fas fa-user-circle"></i> Koo Mean Studio</a>
     </aside>
 
     <main>
         <div class="video-grid" id="videoContainer">
-            </div>
+            <div style="color: #aaa;">กำลังโหลดข้อมูลจาก YouTube...</div>
+        </div>
         <div class="footer-credit">Web Created By koomean</div>
     </main>
 
@@ -285,63 +95,70 @@
     </div>
 
     <script>
-        // --- ส่วนข้อมูลวิดีโอจากช่อง Koo Mean Studio ---
-        // ผมได้ดึง Video ID มาให้แล้วครับ หากมีคลิปใหม่ สามารถมาเพิ่มต่อท้ายในนี้ได้เลย
-        const myVideos = [
-            {
-                id: 'KHyw1yHCBg8', 
-                title: 'การอัพไซเคิลขยะพลาสติก | SCiUS SU11 ⭐️🟢', 
-                views: '33 views', 
-                date: 'Recently uploaded'
-            },
-            {
-                id: 'mKiIFuSg5VI', 
-                title: 'รีวิว GoPro12 เเบบชิวๆ🥶', 
-                views: '44 views', 
-                date: 'Recently uploaded'
-            },
-            {
-                id: 'R6NUJRnDo-0', 
-                title: 'สอนติดตั้งเเละใช้โปรเเกรมPyGraphwarเบื้องต้น', 
-                views: '79 views', 
-                date: '1 year ago'
-            },
-            {
-                id: 'wfpkIVU896o', 
-                title: 'เชื่อมAirPods3กับiPodจะฟังได้ไหม Part1', 
-                views: '159 views', 
-                date: '1 year ago'
-            },
-            {
-                id: 'STx_a2m_bMU', 
-                title: 'เซอร์ไพรส์วันเกิดเจ้าของช่อง(ผมโดนยึดช่องครับ😅)', 
-                views: '139 views', 
-                date: '2 years ago'
-            }
-        ];
+        // ==========================================
+        //  ตั้งค่าข้อมูล (ต้องใส่ให้ครบ ไม่งั้นไม่ทำงาน)
+        // ==========================================
+        const YOUR_API_KEY = 'AIzaSyDNxE5R4AphmQ8nknmm0VsJ_AxCu5bw83g'; 
+        const YOUR_CHANNEL_ID = 'UCgQyeGv_azrkExult8AsgUg'; // นี่คือ ID ของช่อง Koo Mean Studio (ผมหามาให้แล้ว)
+        // ==========================================
 
-        // --- JavaScript Logic ---
+        let allVideos = [];
         const container = document.getElementById('videoContainer');
         const modal = document.getElementById('videoModal');
         const player = document.getElementById('youtubePlayer');
 
-        // ฟังก์ชันสร้างการ์ดวิดีโอ
+        // ฟังก์ชันดึงข้อมูลจาก YouTube API
+        async function fetchYouTubeVideos() {
+            try {
+                // แปลง Channel ID (UC...) เป็น Uploads Playlist ID (UU...) เพื่อประหยัด Quota
+                const uploadsPlaylistId = YOUR_CHANNEL_ID.replace('UC', 'UU');
+                
+                // ดึงรายการวิดีโอล่าสุด 20 รายการ
+                const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=20&key=${YOUR_API_KEY}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error('Error:', data.error);
+                    container.innerHTML = `<div style="color:red">เกิดข้อผิดพลาด: ${data.error.message}<br>โปรดเช็ค API Key ของคุณ</div>`;
+                    return;
+                }
+
+                // จัดรูปแบบข้อมูลใหม่ให้ใช้ง่าย
+                allVideos = data.items.map(item => ({
+                    id: item.snippet.resourceId.videoId,
+                    title: item.snippet.title,
+                    thumbnail: item.snippet.thumbnails.medium.url,
+                    date: new Date(item.snippet.publishedAt).toLocaleDateString('th-TH'),
+                    channelTitle: item.snippet.channelTitle
+                }));
+
+                renderVideos(allVideos);
+
+            } catch (error) {
+                console.error('Fetch error:', error);
+                container.innerHTML = `<div style="color:red">โหลดข้อมูลไม่สำเร็จ (อาจเพราะ API Key ไม่ถูกต้องหรือเน็ตหลุด)</div>`;
+            }
+        }
+
+        // ฟังก์ชันแสดงผลวิดีโอ
         function renderVideos(videos) {
-            container.innerHTML = ''; 
+            container.innerHTML = '';
             videos.forEach(video => {
                 const html = `
                     <div class="video-card" onclick="playVideo('${video.id}')">
                         <div class="thumbnail">
-                            <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg" alt="Thumbnail">
+                            <img src="${video.thumbnail}" alt="Thumbnail">
                         </div>
                         <div class="video-info">
                             <div class="channel-icon">
-                                <img src="https://yt3.googleusercontent.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Icon">
+                                <img src="https://yt3.googleusercontent.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s176-c-k-c0x00ffffff-no-rj" alt="Icon">
                             </div>
                             <div class="video-details">
                                 <div class="video-title">${video.title}</div>
-                                <div class="channel-name">Koo Mean Studio <i class="fas fa-check-circle" style="font-size:0.7rem;"></i></div>
-                                <div class="meta-data">${video.views} • ${video.date}</div>
+                                <div class="channel-name">${video.channelTitle} <i class="fas fa-check-circle" style="font-size:0.7rem;"></i></div>
+                                <div class="meta-data">เผยแพร่เมื่อ ${video.date}</div>
                             </div>
                         </div>
                     </div>
@@ -350,27 +167,24 @@
             });
         }
 
-        // ฟังก์ชันเล่นวิดีโอ
         function playVideo(id) {
             modal.style.display = 'flex';
             player.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
         }
 
-        // ฟังก์ชันปิดวิดีโอ
         function closeVideo() {
             modal.style.display = 'none';
             player.src = '';
         }
 
-        // ฟังก์ชันค้นหา
         function filterVideos() {
             const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = myVideos.filter(v => v.title.toLowerCase().includes(searchText));
+            const filtered = allVideos.filter(v => v.title.toLowerCase().includes(searchText));
             renderVideos(filtered);
         }
 
-        // เริ่มทำงาน
-        renderVideos(myVideos);
+        // เริ่มดึงข้อมูลทันทีเมื่อเปิดเว็บ
+        fetchYouTubeVideos();
 
     </script>
 </body>
