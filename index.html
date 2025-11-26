@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Channel Gallery</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- 1. CSS Reset & Variables --- */
+        :root {
+            --bg-color: #0f0f0f;
+            --header-bg: #0f0f0f;
+            --sidebar-bg: #0f0f0f;
+            --card-hover: #272727;
+            --text-main: #ffffff;
+            --text-sec: #aaaaaa;
+            --search-bg: #121212;
+            --search-border: #303030;
+            --accent: #3ea6ff;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- 2. Header (Top Bar) --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: var(--header-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 100;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: -1px;
+        }
+        .logo i { color: #ff0000; margin-right: 5px; font-size: 1.5rem; }
+
+        .search-bar {
+            display: flex;
+            flex: 0 1 600px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            background-color: var(--search-bg);
+            border: 1px solid var(--search-border);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px 0 0 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .search-bar input:focus { border-color: #1c62b9; }
+
+        .search-bar button {
+            background-color: #222;
+            border: 1px solid var(--search-border);
+            border-left: none;
+            color: var(--text-sec);
+            padding: 0 20px;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-sec);
+            font-size: 1.2rem;
+        }
+
+        /* --- 3. Sidebar (Left) --- */
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            bottom: 0;
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            padding: 10px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar-item:hover { background-color: var(--card-hover); }
+        .sidebar-item i { margin-right: 20px; width: 20px; text-align: center; }
+        .sidebar-item.active { background-color: #272727; font-weight: bold; }
+
+        /* --- 4. Main Content (Video Grid) --- */
+        main {
+            margin-top: 56px;
+            margin-left: 240px;
+            padding: 24px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #333;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            display: flex;
+            margin-top: 12px;
+            gap: 12px;
+        }
+
+        .channel-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #555;
+            flex-shrink: 0;
+        }
+
+        .video-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .channel-name, .meta-data {
+            font-size: 0.85rem;
+            color: var(--text-sec);
+        }
+
+        /* --- 5. Video Player Overlay (Modal) --- */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .video-container {
+            width: 80%;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
+            background: #000;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .footer-credit {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { display: none; } /* ซ่อนเมนูซ้ายบนมือถือ */
+            main { margin-left: 0; }
+            .search-bar { display: none; } /* ซ่อนช่องค้นหาบนมือถือ (แบบย่อ) */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fab fa-youtube"></i> MyTube
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="ค้นหา" onkeyup="filterVideos()">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <i class="fas fa-video"></i>
+            <i class="fas fa-bell"></i>
+            <div class="channel-icon" style="width: 32px; height: 32px; background: #555;"></div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <a href="#" class="sidebar-item active"><i class="fas fa-home"></i> หน้าแรก</a>
+        <a href="#" class="sidebar-item"><i class="fab fa-youtube"></i> วิดีโอของฉัน</a>
+        <a href="#" class="sidebar-item"><i class="fas fa-history"></i> ประวัติการเข้าชม</a>
+        <hr style="border-color: #333;">
+        <div style="padding: 10px; color: #aaa; font-size: 0.9rem;">ติดตาม</div>
+        <a href="#" class="sidebar-item"><i class="fas fa-user-circle"></i> Koomean Ch</a>
+    </aside>
+
+    <main>
+        <div class="video-grid" id="videoContainer">
+            </div>
+        <div class="footer-credit">Create By koomean</div>
+    </main>
+
+    <div class="video-modal" id="videoModal">
+        <div class="video-container">
+            <iframe id="youtubePlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <button class="close-btn" onclick="closeVideo()">ปิดหน้าต่าง</button>
+    </div>
+
+    <script>
+        // --- ส่วนการตั้งค่าข้อมูลวิดีโอ (แก้ไขตรงนี้!) ---
+        // id: เอามาจากลิงก์ Youtube เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ -> id คือ dQw4w9WgXcQ
+        const myVideos = [
+            {
+                id: 'dQw4w9WgXcQ', 
+                title: 'เพลงในตำนานที่คุณต้องฟังสักครั้ง', 
+                views: '1.2B views', 
+                date: '10 years ago'
+            },
+            {
+                id: 'jNQXAC9IVRw', 
+                title: 'วิดีโอคลิปแรกของ YouTube (Me at the zoo)', 
+                views: '200M views', 
+                date: '17 years ago'
+            },
+            {
+                id: '5qap5aO4i9A', 
+                title: 'Lo-fi hip hop radio - beats to relax/study to', 
+                views: '50K watching', 
+                date: 'LIVE'
+            },
+            {
+                id: 'LXb3EKWsInQ', 
+                title: 'COSTA RICA IN 4K 60fps HDR (ULTRA HD)', 
+                views: '5.2M views', 
+                date: '2 years ago'
+            },
+            {
+                id: 'ScMzIvxBSi4', 
+                title: 'Star Wars - Imperial March (Guitars)', 
+                views: '10M views', 
+                date: '5 years ago'
+            },
+            // ก็อปปี้ปีกกา {} แล้วเพิ่มคลิปตรงนี้ได้เลย
+        ];
+
+        // --- JavaScript Logic ---
+        const container = document.getElementById('videoContainer');
+        const modal = document.getElementById('videoModal');
+        const player = document.getElementById('youtubePlayer');
+
+        // ฟังก์ชันสร้างการ์ดวิดีโอ
+        function renderVideos(videos) {
+            container.innerHTML = ''; // เคลียร์ของเก่า
+            videos.forEach(video => {
+                const html = `
+                    <div class="video-card" onclick="playVideo('${video.id}')">
+                        <div class="thumbnail">
+                            <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg" alt="Thumbnail">
+                        </div>
+                        <div class="video-info">
+                            <div class="channel-icon"></div>
+                            <div class="video-details">
+                                <div class="video-title">${video.title}</div>
+                                <div class="channel-name">Koomean Channel <i class="fas fa-check-circle" style="font-size:0.7rem;"></i></div>
+                                <div class="meta-data">${video.views} • ${video.date}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // ฟังก์ชันเล่นวิดีโอ
+        function playVideo(id) {
+            modal.style.display = 'flex';
+            // autoplay=1 เพื่อให้เล่นทันที
+            player.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+        }
+
+        // ฟังก์ชันปิดวิดีโอ
+        function closeVideo() {
+            modal.style.display = 'none';
+            player.src = ''; // หยุดวิดีโอเมื่อปิด
+        }
+
+        // ฟังก์ชันค้นหา
+        function filterVideos() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = myVideos.filter(v => v.title.toLowerCase().includes(searchText));
+            renderVideos(filtered);
+        }
+
+        // เริ่มทำงานครั้งแรก
+        renderVideos(myVideos);
+
+    </script>
+</body>
+</html>
