@@ -113,8 +113,8 @@
                 // แปลง Channel ID (UC...) เป็น Uploads Playlist ID (UU...) เพื่อประหยัด Quota
                 const uploadsPlaylistId = YOUR_CHANNEL_ID.replace('UC', 'UU');
                 
-                // ดึงรายการวิดีโอล่าสุด 20 รายการ
-                const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=20&key=${YOUR_API_KEY}`;
+                // ดึงรายการวิดีโอล่าสุด 100 รายการ
+                const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=100&key=${YOUR_API_KEY}`;
                 
                 const response = await fetch(url);
                 const data = await response.json();
