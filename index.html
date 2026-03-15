@@ -4,493 +4,956 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koo Mean Studio Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* --- Modern CSS Design --- */
+        /* ════════════════════════════════════
+           § 1 · DESIGN TOKENS
+        ════════════════════════════════════ */
         :root {
-            --bg-color: #121212;
-            --sidebar-bg: #1e1e1e;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-sec: #aaaaaa;
-            --accent: #ff0000; /* YouTube Red */
-            --accent-glow: rgba(255, 0, 0, 0.4);
-            --hover-bg: #2a2a2a;
-            --glass-bg: rgba(18, 18, 18, 0.85);
+            --bg:          #0f0f0f;
+            --surface:     #1a1a1a;
+            --surface2:    #222;
+            --border:      rgba(255,255,255,0.07);
+            --text-main:   #f1f1f1;
+            --text-sec:    #aaa;
+            --text-muted:  #666;
+            --accent:      #ff0000;
+            --accent-glow: rgba(255,0,0,0.35);
+            --accent-soft: rgba(255,0,0,0.1);
+            --glass:       rgba(15,15,15,0.88);
+            --radius-card: 14px;
+            --radius-pill: 50px;
+            --header-h:    64px;
+            --sidebar-w:   240px;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-hover: 0 16px 40px rgba(0,0,0,0.55);
+            --transition:  0.25s cubic-bezier(.25,.8,.25,1);
         }
 
-        * { box-sizing: border-box; }
+        /* ════════════════════════════════════
+           § 2 · RESET & BASE
+        ════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Kanit', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text-main);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #666; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* --- Glassmorphism Header --- */
+        a { color: inherit; text-decoration: none; }
+
+        /* ════════════════════════════════════
+           § 3 · HEADER
+        ════════════════════════════════════ */
         header {
             position: fixed;
             top: 0; left: 0; right: 0;
-            height: 64px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            height: var(--header-h);
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 0 20px;
+            z-index: 200;
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
         }
 
+        /* Logo */
         .logo {
             display: flex;
             align-items: center;
-            font-weight: 600;
-            font-size: 1.4rem;
-            color: white;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            gap: 9px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
-        .logo i { 
-            color: var(--accent); 
-            margin-right: 8px; 
-            font-size: 1.6rem; 
-            filter: drop-shadow(0 0 5px var(--accent-glow));
+        .logo i {
+            color: var(--accent);
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
-        /* --- Search Bar --- */
-        .search-container {
-            flex: 0 1 500px;
-            position: relative;
+        /* Search */
+        .search-wrap {
+            flex: 1;
+            max-width: 480px;
         }
         .search-bar {
             display: flex;
-            background-color: #222;
-            border-radius: 50px;
+            background: var(--surface2);
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
             overflow: hidden;
-            border: 1px solid #333;
-            transition: all 0.3s ease;
+            transition: border-color var(--transition), box-shadow var(--transition);
         }
         .search-bar:focus-within {
             border-color: #555;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
         }
         .search-bar input {
-            width: 100%;
+            flex: 1;
             background: transparent;
             border: none;
-            color: white;
-            padding: 10px 20px;
+            color: var(--text-main);
+            padding: 10px 18px;
             font-family: 'Kanit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
         }
+        .search-bar input::placeholder { color: var(--text-muted); }
         .search-bar button {
-            background: #333;
+            background: var(--surface);
             border: none;
             color: var(--text-sec);
-            padding: 0 24px;
+            padding: 0 20px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: background var(--transition), color var(--transition);
+            border-left: 1px solid var(--border);
         }
-        .search-bar button:hover {
-            background: #444;
-            color: white;
-        }
+        .search-bar button:hover { background: #2e2e2e; color: var(--text-main); }
 
-        .user-menu {
+        /* Header right */
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
-            color: var(--text-sec);
-            font-size: 1.2rem;
+            gap: 14px;
+            flex-shrink: 0;
         }
-        .user-menu i { cursor: pointer; transition: 0.2s; }
-        .user-menu i:hover { color: white; }
-        
-        /* รูปโปรไฟล์ */
-        .channel-icon img {
+        .header-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-sec);
+            font-size: 1.15rem;
+            cursor: pointer;
             width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            transition: background var(--transition), color var(--transition);
+        }
+        .header-icon-btn:hover { background: var(--surface2); color: var(--text-main); }
+
+        /* Koo Mean Site button – header */
+        .site-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-sec);
+            white-space: nowrap;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .site-pill:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: #ff6b6b;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        .site-pill i { font-size: 0.85rem; }
+
+        .profile-avatar {
+            width: 36px; height: 36px;
             border-radius: 50%;
             border: 2px solid transparent;
-            transition: 0.3s;
             object-fit: cover;
+            transition: border-color var(--transition);
+            cursor: pointer;
         }
-        .channel-icon img:hover { border-color: var(--accent); }
+        .profile-avatar:hover { border-color: var(--accent); }
 
-        /* --- Sidebar --- */
+        /* ════════════════════════════════════
+           § 4 · SIDEBAR
+        ════════════════════════════════════ */
         .sidebar {
             position: fixed;
-            top: 64px; left: 0; bottom: 0;
-            width: 250px;
-            padding: 20px 12px;
+            top: var(--header-h); left: 0; bottom: 0;
+            width: var(--sidebar-w);
+            padding: 16px 10px;
             overflow-y: auto;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 100;
+        }
+        .sidebar-section-label {
+            padding: 8px 18px 4px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 10px 8px;
         }
         .sidebar-item {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            border-radius: 12px;
+            gap: 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
             cursor: pointer;
-            margin-bottom: 8px;
-            color: var(--text-main);
-            text-decoration: none;
+            color: var(--text-sec);
+            font-size: 0.95rem;
             font-weight: 400;
-            transition: all 0.2s ease;
+            transition: all var(--transition);
         }
+        .sidebar-item i { width: 20px; text-align: center; font-size: 1rem; flex-shrink: 0; }
         .sidebar-item:hover {
-            background-color: var(--hover-bg);
-            transform: translateX(5px);
+            background: var(--surface2);
+            color: var(--text-main);
+            transform: translateX(4px);
         }
         .sidebar-item.active {
-            background-color: #2a2a2a;
+            background: var(--surface2);
+            color: var(--text-main);
             font-weight: 600;
-            color: white;
-            border-left: 4px solid var(--accent);
+            border-left: 3px solid var(--accent);
         }
-        .sidebar-item i { margin-right: 15px; font-size: 1.1rem; width: 24px; text-align: center; }
+        /* Koo Mean Site item in sidebar */
+        .sidebar-item.site-link-item {
+            color: #ff6b6b;
+            border: 1px solid rgba(255,0,0,0.15);
+            background: var(--accent-soft);
+        }
+        .sidebar-item.site-link-item:hover {
+            background: rgba(255,0,0,0.18);
+            border-color: rgba(255,0,0,0.4);
+            transform: translateX(4px);
+        }
 
-        /* --- Main Content --- */
+        /* ════════════════════════════════════
+           § 5 · MAIN CONTENT
+        ════════════════════════════════════ */
         main {
-            margin-top: 64px;
-            margin-left: 250px;
-            padding: 30px;
+            margin-top: var(--header-h);
+            margin-left: var(--sidebar-w);
+            padding: 28px;
             min-height: 100vh;
         }
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+        /* Section header above grid */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+        .section-title i { color: var(--accent); }
+        .video-count {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            background: var(--surface2);
+            padding: 4px 12px;
+            border-radius: var(--radius-pill);
         }
 
-        /* --- Video Card Design --- */
+        /* ════════════════════════════════════
+           § 6 · VIDEO GRID
+        ════════════════════════════════════ */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+            gap: 20px;
+        }
+
+        /* ── Video Card ── */
         .video-card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
+            background: var(--surface);
+            border-radius: var(--radius-card);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
             overflow: hidden;
+            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
         }
-
         .video-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            background-color: #252525;
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            background: #202020;
+            border-color: rgba(255,255,255,0.12);
         }
 
+        /* Thumbnail */
         .thumbnail {
             width: 100%;
             aspect-ratio: 16/9;
             overflow: hidden;
-            position: relative;
             background: #000;
+            position: relative;
         }
-        
         .thumbnail img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
-            opacity: 0.9;
+            transition: transform 0.5s ease, opacity 0.3s;
+            opacity: 0.88;
         }
-
         .video-card:hover .thumbnail img {
-            transform: scale(1.1);
+            transform: scale(1.06);
             opacity: 1;
         }
 
-        .video-info {
-            padding: 14px;
+        /* Play overlay */
+        .play-overlay {
+            position: absolute;
+            inset: 0;
             display: flex;
-            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            background: rgba(0,0,0,0.35);
+            transition: opacity 0.25s;
         }
-
-        .video-details {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .video-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            line-height: 1.4;
+        .play-overlay i {
+            font-size: 2.8rem;
             color: #fff;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+            transform: scale(0.85);
+            transition: transform 0.2s;
+        }
+        .video-card:hover .play-overlay { opacity: 1; }
+        .video-card:hover .play-overlay i { transform: scale(1); }
+
+        /* Card body */
+        .video-info {
+            padding: 12px 14px 14px;
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+        .ch-thumb {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .video-details { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        .video-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 5px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
         .channel-name {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-sec);
             display: flex;
             align-items: center;
+            gap: 4px;
             margin-bottom: 2px;
         }
-        .channel-name i { margin-left: 4px; color: var(--text-sec); font-size: 0.7rem; }
-        
-        .meta-data {
-            font-size: 0.8rem;
-            color: #777;
-        }
+        .channel-name .verified { color: var(--text-muted); font-size: 0.65rem; }
+        .meta-data { font-size: 0.78rem; color: var(--text-muted); }
 
-        /* --- Skeleton Loading Animation --- */
-        .skeleton {
-            background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
+        /* ════════════════════════════════════
+           § 7 · SKELETON LOADER
+        ════════════════════════════════════ */
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
+            0%   { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+        .skeleton {
+            background: linear-gradient(90deg, #1c1c1c 25%, #272727 50%, #1c1c1c 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
 
-        /* --- Modal Player (ส่วนที่แก้ไขให้ใหญ่ขึ้น) --- */
+        /* ════════════════════════════════════
+           § 8 · ERROR / EMPTY STATE
+        ════════════════════════════════════ */
+        .state-msg {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: var(--text-sec);
+            gap: 14px;
+            text-align: center;
+        }
+        .state-msg i { font-size: 2.5rem; color: var(--text-muted); }
+        .state-msg h3 { font-size: 1.05rem; font-weight: 600; }
+        .state-msg p  { font-size: 0.88rem; color: var(--text-muted); max-width: 340px; line-height: 1.6; }
+        .retry-btn {
+            padding: 9px 22px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            color: var(--text-main);
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .retry-btn:hover { background: #2e2e2e; border-color: #555; }
+
+        /* ════════════════════════════════════
+           § 9 · MODAL PLAYER
+        ════════════════════════════════════ */
         .video-modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.95); /* เพิ่มความมืดพื้นหลัง */
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            inset: 0;
+            background: rgba(0,0,0,0.94);
+            backdrop-filter: blur(10px);
+            z-index: 500;
             flex-direction: column;
-            animation: fadeIn 0.3s ease;
-            padding: 20px; /* เพิ่ม Padding กันชิดขอบ */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.28s ease;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; }
-            to { opacity: 1; }
+            to   { opacity: 1; }
         }
-
-        .video-container {
-            width: 90%; /* ขยายความกว้างเป็น 90% ของหน้าจอ */
-            max-width: 1400px; /* เพิ่มขีดจำกัดความกว้างให้รองรับจอใหญ่ */
-            aspect-ratio: 16/9; /* บังคับสัดส่วน 16:9 เสมอ */
+        .modal-video-wrap {
+            width: min(90vw, 1280px);
+            aspect-ratio: 16/9;
             background: #000;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 60px rgba(255,0,0,0.18), 0 30px 80px rgba(0,0,0,0.7);
             position: relative;
         }
-
-        iframe {
-            width: 100%;
-            height: 100%;
+        .modal-video-wrap iframe {
+            width: 100%; height: 100%;
             border: none;
+            display: block;
         }
-
-        .close-btn {
-            margin-top: 24px;
-            padding: 12px 35px;
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            font-family: 'Kanit';
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: 0.2s;
+        .modal-title {
+            margin-top: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            max-width: min(90vw, 1280px);
+            text-align: center;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+        .modal-close-btn {
+            margin-top: 18px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            padding: 10px 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius-pill);
+            color: var(--text-main);
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition);
         }
-        .close-btn:hover {
-            background-color: var(--accent);
+        .modal-close-btn:hover {
+            background: var(--accent);
             border-color: var(--accent);
-            transform: scale(1.05);
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
 
-        .footer-credit {
+        /* ════════════════════════════════════
+           § 10 · FOOTER
+        ════════════════════════════════════ */
+        .footer {
             margin-top: 60px;
+            padding-bottom: 40px;
             text-align: center;
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            opacity: 0.5;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar { display: none; } 
+        /* ════════════════════════════════════
+           § 11 · RESPONSIVE
+        ════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
             main { margin-left: 0; padding: 16px; }
-            .search-container { display: none; } 
+        }
+        @media (max-width: 600px) {
+            .search-wrap { display: none; }
+            .site-pill span { display: none; }
             .video-grid { grid-template-columns: 1fr; }
-            .header { padding: 0 16px; }
-            
-            /* ปรับ Modal บนมือถือ */
-            .video-container {
-                width: 100%; /* มือถือให้เต็มจอเลย */
-            }
+            header { padding: 0 14px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ══════════════════════════════
+         HEADER
+    ══════════════════════════════ -->
     <header>
         <div class="logo">
-            <i class="fab fa-youtube"></i> Koo Mean Tube
+            <i class="fab fa-youtube"></i>
+            <span>Koo Mean Tube</span>
         </div>
-        <div class="search-container">
+
+        <div class="search-wrap">
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="ค้นหาวิดีโอ..." onkeyup="filterVideos()">
-                <button><i class="fas fa-search"></i></button>
+                <input type="text" id="search-input" placeholder="ค้นหาวิดีโอ…">
+                <button id="search-btn" aria-label="Search"><i class="fas fa-search"></i></button>
             </div>
         </div>
-        <div class="user-menu">
-            <i class="fas fa-video"></i>
-            <i class="fas fa-bell"></i>
-            <div class="channel-icon">
-                <img id="my-profile-pic" src="https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Profile">
-            </div>
+
+        <div class="header-right">
+            <!-- Koo Mean Site pill -->
+            <a href="https://koomean.github.io/koomean/" target="_blank" rel="noopener noreferrer"
+               class="site-pill" title="ไปที่ Koo Mean SITE">
+                <i class="fas fa-house"></i>
+                <span>Koo Mean SITE</span>
+            </a>
+
+            <button class="header-icon-btn" id="refresh-btn" title="โหลดใหม่">
+                <i class="fas fa-rotate-right"></i>
+            </button>
+
+            <img class="profile-avatar"
+                 src="https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj"
+                 alt="Profile"
+                 id="profile-pic"
+                 onerror="this.src='https://ui-avatars.com/api/?name=KM&background=ff0000&color=fff'">
         </div>
     </header>
 
+    <!-- ══════════════════════════════
+         SIDEBAR
+    ══════════════════════════════ -->
     <aside class="sidebar">
-        <a href="#" class="sidebar-item active" onclick="loadVideos()"><i class="fas fa-home"></i> หน้าแรก</a>
-        <a href="https://www.youtube.com/@koomeanstudio" target="_blank" class="sidebar-item"><i class="fab fa-youtube"></i> ไปที่ YouTube</a>
-        <hr style="border-color: #333; margin: 15px 0;">
-        <div style="padding: 10px 20px; color: #777; font-size: 0.8rem; font-weight: 600;">เจ้าของช่อง</div>
-        <a href="#" class="sidebar-item"><i class="fas fa-user-circle"></i> Koo Mean Studio</a>
+        <div class="sidebar-item active" id="nav-home">
+            <i class="fas fa-home"></i> หน้าแรก
+        </div>
+        <a href="https://www.youtube.com/@koomeanstudio" target="_blank" rel="noopener noreferrer" class="sidebar-item">
+            <i class="fab fa-youtube"></i> ไปที่ YouTube
+        </a>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-label">เจ้าของช่อง</div>
+        <div class="sidebar-item">
+            <i class="fas fa-user-circle"></i> Koo Mean Studio
+        </div>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-label">ลิงก์อื่น</div>
+        <a href="https://koomean.github.io/koomean/" target="_blank" rel="noopener noreferrer"
+           class="sidebar-item site-link-item">
+            <i class="fas fa-house"></i> Koo Mean SITE
+        </a>
     </aside>
 
+    <!-- ══════════════════════════════
+         MAIN
+    ══════════════════════════════ -->
     <main>
-        <div class="video-grid" id="videoContainer">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-fire"></i> วิดีโอล่าสุด
             </div>
-        <div class="footer-credit">Web Created By koomean</div>
+            <span class="video-count" id="video-count">โหลดอยู่…</span>
+        </div>
+
+        <div class="video-grid" id="video-grid"></div>
+        <div class="footer">Web Created By koomean</div>
     </main>
 
-    <div class="video-modal" id="videoModal">
-        <div class="video-container">
-            <iframe id="youtubePlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <!-- ══════════════════════════════
+         MODAL PLAYER
+    ══════════════════════════════ -->
+    <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Video player">
+        <div class="modal-video-wrap">
+            <iframe id="youtube-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
-        <button class="close-btn" onclick="closeVideo()"><i class="fas fa-times"></i> ปิดหน้าต่าง</button>
+        <div class="modal-title" id="modal-title"></div>
+        <button class="modal-close-btn" id="close-modal-btn">
+            <i class="fas fa-times"></i> ปิดหน้าต่าง
+        </button>
     </div>
 
+    <!-- ════════════════════════════════════════════════════════
+         JAVASCRIPT
+    ════════════════════════════════════════════════════════ -->
     <script>
-        // ==========================================
-        //  ตั้งค่าข้อมูล (ใช้ Key เดิมของคุณ)
-        // ==========================================
-        const YOUR_API_KEY = 'AIzaSyDNxE5R4AphmQ8nknmm0VsJ_AxCu5bw83g'; 
-        const YOUR_CHANNEL_ID = 'UCgQyeGv_azrkExult8AsgUg';
-        // ==========================================
+    'use strict';
 
-        let allVideos = [];
-        const container = document.getElementById('videoContainer');
-        const modal = document.getElementById('videoModal');
-        const player = document.getElementById('youtubePlayer');
+    // ════════════════════════════════════
+    // § 1 · CONFIG
+    // ════════════════════════════════════
 
-        // แสดง Skeleton Loading ระหว่างรอข้อมูล
-        function showSkeletonLoading() {
-            container.innerHTML = '';
-            for(let i=0; i<8; i++) {
-                container.innerHTML += `
-                    <div class="video-card" style="pointer-events: none;">
-                        <div class="thumbnail skeleton"></div>
-                        <div class="video-info">
-                             <div class="channel-icon skeleton" style="width: 36px; height: 36px; border-radius: 50%;"></div>
-                             <div class="video-details" style="width: 80%;">
-                                <div class="skeleton" style="height: 16px; margin-bottom: 8px; width: 90%;"></div>
-                                <div class="skeleton" style="height: 12px; width: 60%;"></div>
-                             </div>
-                        </div>
+    const CONFIG = {
+        API_KEY   : 'AIzaSyDNxE5R4AphmQ8nknmm0VsJ_AxCu5bw83g',
+        CHANNEL_ID: 'UCgQyeGv_azrkExult8AsgUg',
+        MAX_RESULTS: 24,
+        PROFILE_SRC: 'https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj',
+    };
+
+    // ════════════════════════════════════
+    // § 2 · ELEMENT CACHE
+    // ════════════════════════════════════
+
+    const $ = id => document.getElementById(id);
+    const DOM = {
+        grid       : $('video-grid'),
+        searchInput: $('search-input'),
+        searchBtn  : $('search-btn'),
+        refreshBtn : $('refresh-btn'),
+        navHome    : $('nav-home'),
+        videoCount : $('video-count'),
+        modal      : $('video-modal'),
+        player     : $('youtube-player'),
+        modalTitle : $('modal-title'),
+        closeBtn   : $('close-modal-btn'),
+    };
+
+    // ════════════════════════════════════
+    // § 3 · STATE
+    // ════════════════════════════════════
+
+    const state = {
+        videos   : [],   // { id, title, thumbnail, date, channelTitle }
+        loading  : false,
+    };
+
+    // ════════════════════════════════════
+    // § 4 · SECURITY HELPERS
+    // ════════════════════════════════════
+
+    /** Escapes HTML special chars to prevent XSS when building innerHTML is unavoidable. */
+    function esc(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /** Returns true only for known-safe YouTube video IDs (11 alphanumeric chars). */
+    function isValidVideoId(id) {
+        return typeof id === 'string' && /^[A-Za-z0-9_-]{11}$/.test(id);
+    }
+
+    /** Returns true only for https thumbnail URLs from YouTube/Google. */
+    function isValidThumbnailUrl(url) {
+        try {
+            const u = new URL(url);
+            return (u.protocol === 'https:') &&
+                   (u.hostname.endsWith('.ytimg.com') || u.hostname.endsWith('ggpht.com') ||
+                    u.hostname.endsWith('googleusercontent.com'));
+        } catch { return false; }
+    }
+
+    // ════════════════════════════════════
+    // § 5 · SKELETON LOADING
+    // ════════════════════════════════════
+
+    function showSkeletons(n = 8) {
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < n; i++) {
+            const card = document.createElement('div');
+            card.className  = 'video-card';
+            card.style.pointerEvents = 'none';
+            card.innerHTML = `
+                <div class="thumbnail skeleton" style="border-radius:0;"></div>
+                <div class="video-info">
+                    <div class="skeleton" style="width:34px;height:34px;border-radius:50%;flex-shrink:0;"></div>
+                    <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:2px;">
+                        <div class="skeleton" style="height:14px;width:90%;border-radius:4px;"></div>
+                        <div class="skeleton" style="height:12px;width:55%;border-radius:4px;"></div>
                     </div>
-                `;
-            }
+                </div>`;
+            frag.appendChild(card);
         }
+        DOM.grid.innerHTML = '';
+        DOM.grid.appendChild(frag);
+        DOM.videoCount.textContent = 'โหลดอยู่…';
+    }
 
-        // ฟังก์ชันดึงข้อมูลจาก YouTube API
-        async function fetchYouTubeVideos() {
-            showSkeletonLoading(); 
+    // ════════════════════════════════════
+    // § 6 · FETCH DATA
+    // ════════════════════════════════════
 
-            try {
-                const uploadsPlaylistId = YOUR_CHANNEL_ID.replace('UC', 'UU');
-                const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=20&key=${YOUR_API_KEY}`;
-                
-                const response = await fetch(url);
-                const data = await response.json();
+    async function fetchVideos() {
+        if (state.loading) return;
+        state.loading = true;
+        showSkeletons();
 
-                if (data.error) {
-                    container.innerHTML = `<div style="color:red; text-align:center; padding:50px;">เกิดข้อผิดพลาด: ${data.error.message}</div>`;
-                    return;
-                }
+        // Spin refresh icon
+        DOM.refreshBtn.querySelector('i').classList.add('fa-spin');
 
-                allVideos = data.items.map(item => ({
-                    id: item.snippet.resourceId.videoId,
-                    title: item.snippet.title,
-                    thumbnail: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : item.snippet.thumbnails.medium.url, 
-                    date: new Date(item.snippet.publishedAt).toLocaleDateString('th-TH'),
-                    channelTitle: item.snippet.channelTitle
+        try {
+            // Derive UU playlist ID from UC channel ID
+            if (!CONFIG.CHANNEL_ID.startsWith('UC')) throw new Error('CHANNEL_ID ต้องขึ้นต้นด้วย UC');
+            const playlistId = 'UU' + CONFIG.CHANNEL_ID.slice(2);
+
+            const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
+            url.searchParams.set('part',       'snippet');
+            url.searchParams.set('playlistId', playlistId);
+            url.searchParams.set('maxResults', CONFIG.MAX_RESULTS);
+            url.searchParams.set('key',        CONFIG.API_KEY);
+
+            const res  = await fetch(url.toString());
+            const data = await res.json();
+
+            if (data.error) throw new Error(data.error.message);
+
+            state.videos = (data.items || [])
+                .filter(item =>
+                    item?.snippet?.resourceId?.videoId &&
+                    isValidVideoId(item.snippet.resourceId.videoId)
+                )
+                .map(item => ({
+                    id           : item.snippet.resourceId.videoId,
+                    title        : item.snippet.title || '(ไม่มีชื่อ)',
+                    thumbnail    : item.snippet.thumbnails?.high?.url
+                                 || item.snippet.thumbnails?.medium?.url
+                                 || '',
+                    date         : new Date(item.snippet.publishedAt)
+                                     .toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' }),
+                    channelTitle : item.snippet.channelTitle || 'Koo Mean Studio',
                 }));
 
-                renderVideos(allVideos);
+            renderVideos(state.videos);
 
-            } catch (error) {
-                console.error('Fetch error:', error);
-                container.innerHTML = `<div style="color:red; text-align:center;">โหลดข้อมูลไม่สำเร็จ (ตรวจสอบ API Key หรืออินเทอร์เน็ต)</div>`;
+        } catch (err) {
+            console.error('fetchVideos:', err);
+            showError(err.message);
+        } finally {
+            state.loading = false;
+            DOM.refreshBtn.querySelector('i').classList.remove('fa-spin');
+        }
+    }
+
+    // ════════════════════════════════════
+    // § 7 · RENDER – uses createElement (no innerHTML with server data)
+    // ════════════════════════════════════
+
+    function renderVideos(videos) {
+        DOM.grid.innerHTML = '';
+
+        if (!videos.length) {
+            showEmpty();
+            DOM.videoCount.textContent = 'ไม่พบวิดีโอ';
+            return;
+        }
+
+        DOM.videoCount.textContent = `${videos.length} วิดีโอ`;
+
+        const frag = document.createDocumentFragment();
+
+        videos.forEach(video => {
+            // ── Card ──
+            const card = document.createElement('div');
+            card.className = 'video-card';
+
+            // Thumbnail wrapper
+            const thumbWrap = document.createElement('div');
+            thumbWrap.className = 'thumbnail';
+
+            const img = document.createElement('img');
+            img.alt     = video.title; // safe: sets attribute not innerHTML
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            if (isValidThumbnailUrl(video.thumbnail)) {
+                img.src = video.thumbnail;
+            } else {
+                img.src = `https://i.ytimg.com/vi/${esc(video.id)}/hqdefault.jpg`;
             }
-        }
+            img.onerror = () => { img.src = 'https://via.placeholder.com/480x270/1a1a1a/666?text=No+Thumbnail'; };
 
-        // ฟังก์ชันแสดงผลวิดีโอ
-        function renderVideos(videos) {
-            container.innerHTML = '';
-            videos.forEach(video => {
-                const html = `
-                    <div class="video-card" onclick="playVideo('${video.id}')">
-                        <div class="thumbnail">
-                            <img src="${video.thumbnail}" alt="Thumbnail">
-                        </div>
-                        <div class="video-info">
-                            <div class="channel-icon">
-                                <img src="https://yt3.ggpht.com/59h_JVNermHaksRHf1EimL5syvfxq_ll-_dDnKLIi2JttXq0BHyl9o5EKbyJQ1_WZ8MqHyA47w=s88-c-k-c0x00ffffff-no-rj" alt="Icon">
-                            </div>
-                            <div class="video-details">
-                                <div class="video-title">${video.title}</div>
-                                <div class="channel-name">${video.channelTitle} <i class="fas fa-check-circle"></i></div>
-                                <div class="meta-data">เผยแพร่ ${video.date}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += html;
+            const overlay = document.createElement('div');
+            overlay.className = 'play-overlay';
+            const playIcon = document.createElement('i');
+            playIcon.className = 'fas fa-play-circle';
+            overlay.appendChild(playIcon);
+
+            thumbWrap.appendChild(img);
+            thumbWrap.appendChild(overlay);
+
+            // Info row
+            const info = document.createElement('div');
+            info.className = 'video-info';
+
+            const chImg = document.createElement('img');
+            chImg.className = 'ch-thumb';
+            chImg.src    = CONFIG.PROFILE_SRC;
+            chImg.alt    = video.channelTitle;
+            chImg.onerror = () => { chImg.src = 'https://ui-avatars.com/api/?name=KM&background=ff0000&color=fff'; };
+
+            const details = document.createElement('div');
+            details.className = 'video-details';
+
+            const titleEl = document.createElement('div');
+            titleEl.className   = 'video-title';
+            titleEl.textContent = video.title; // safe: textContent
+
+            const chName = document.createElement('div');
+            chName.className = 'channel-name';
+            chName.textContent = video.channelTitle; // safe
+            const checkIcon = document.createElement('i');
+            checkIcon.className = 'fas fa-check-circle verified';
+            chName.appendChild(checkIcon);
+
+            const meta = document.createElement('div');
+            meta.className   = 'meta-data';
+            meta.textContent = `เผยแพร่ ${video.date}`; // safe
+
+            details.append(titleEl, chName, meta);
+            info.append(chImg, details);
+            card.append(thumbWrap, info);
+
+            // Click → play (validate ID before using)
+            card.addEventListener('click', () => {
+                if (isValidVideoId(video.id)) playVideo(video.id, video.title);
             });
-        }
 
-        function playVideo(id) {
-            modal.style.display = 'flex';
-            player.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-        }
+            frag.appendChild(card);
+        });
 
-        function closeVideo() {
-            modal.style.display = 'none';
-            player.src = '';
-        }
+        DOM.grid.appendChild(frag);
+    }
 
-        function filterVideos() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allVideos.filter(v => v.title.toLowerCase().includes(searchText));
-            renderVideos(filtered);
-        }
+    // ════════════════════════════════════
+    // § 8 · ERROR / EMPTY STATES
+    // ════════════════════════════════════
 
-        fetchYouTubeVideos();
+    function showError(msg) {
+        DOM.grid.innerHTML = '';
+        DOM.videoCount.textContent = 'เกิดข้อผิดพลาด';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'state-msg';
+
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-triangle-exclamation';
+
+        const h3 = document.createElement('h3');
+        h3.textContent = 'โหลดข้อมูลไม่สำเร็จ';
+
+        const p = document.createElement('p');
+        p.textContent = msg || 'ตรวจสอบ API Key หรืออินเทอร์เน็ตแล้วลองใหม่';
+
+        const retryBtn = document.createElement('button');
+        retryBtn.className   = 'retry-btn';
+        retryBtn.textContent = '🔄 ลองใหม่';
+        retryBtn.addEventListener('click', fetchVideos);
+
+        wrap.append(icon, h3, p, retryBtn);
+        DOM.grid.appendChild(wrap);
+    }
+
+    function showEmpty() {
+        const wrap = document.createElement('div');
+        wrap.className = 'state-msg';
+
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-film';
+
+        const h3 = document.createElement('h3');
+        h3.textContent = 'ไม่พบวิดีโอ';
+
+        const p = document.createElement('p');
+        p.textContent = 'ลองเปลี่ยนคำค้นหาดูนะครับ';
+
+        wrap.append(icon, h3, p);
+        DOM.grid.appendChild(wrap);
+    }
+
+    // ════════════════════════════════════
+    // § 9 · MODAL PLAYER
+    // ════════════════════════════════════
+
+    function playVideo(id, title) {
+        DOM.modal.style.display     = 'flex';
+        DOM.modalTitle.textContent  = title;    // safe: textContent
+        DOM.player.src              = `https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        DOM.modal.style.display     = 'none';
+        DOM.player.src              = '';
+        DOM.modalTitle.textContent  = '';
+        document.body.style.overflow = '';
+    }
+
+    // ════════════════════════════════════
+    // § 10 · SEARCH  (debounced)
+    // ════════════════════════════════════
+
+    function debounce(fn, ms) {
+        let t;
+        return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+    }
+
+    const doSearch = debounce(() => {
+        const term = DOM.searchInput.value.trim().toLowerCase();
+        if (!term) { renderVideos(state.videos); return; }
+        renderVideos(state.videos.filter(v => v.title.toLowerCase().includes(term)));
+    }, 200);
+
+    // ════════════════════════════════════
+    // § 11 · EVENT WIRING
+    // ════════════════════════════════════
+
+    DOM.searchInput.addEventListener('input',   doSearch);
+    DOM.searchBtn.addEventListener('click',     doSearch);
+    DOM.searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+    DOM.refreshBtn.addEventListener('click', fetchVideos);
+    DOM.navHome.addEventListener('click',    fetchVideos);
+
+    DOM.closeBtn.addEventListener('click', closeModal);
+
+    // Close modal on backdrop click
+    DOM.modal.addEventListener('click', e => { if (e.target === DOM.modal) closeModal(); });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ════════════════════════════════════
+    // § 12 · INIT
+    // ════════════════════════════════════
+
+    fetchVideos();
 
     </script>
 </body>
